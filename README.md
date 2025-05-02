@@ -1,12 +1,26 @@
-# React + Vite
+# Color Assignment App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+A React web application that assigns unique colors to users using Google Sheets as a backend database.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Live Demo
+🔗 [Web App URL](https://astounding-piroshki-cec943.netlify.app/)
 
-## Expanding the ESLint configuration
+## Backend Setup
+📊 [Google Sheet Template](https://docs.google.com/spreadsheets/d/1hCbNkhOtUYw78DR0YEoyR1sMQzHvIe0GSBf8apIP7-4/edit?gid=231565228#gid=231565228)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Features
+
+- ✨ Unique color assignment for each user
+- 📱 Mobile-friendly responsive design
+- 💾 Persistent storage using localStorage
+- 📊 Google Sheets backend integration
+- 🎨 Interactive color palette display
+
+## Technologies Used
+
+- React.js (Frontend)
+- Google Apps Script (Backend)
+- Google Sheets (Database)
+- CSS3 (Styling)
+- GitHub Pages (Hosting)
