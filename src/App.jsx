@@ -6,7 +6,7 @@ import ColorSuccess from './components/ColorSuccess';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
 
-const SCRIPT_URL = "YOUR_GOOGLE_SCRIPT_URL";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzxjAtbfThvYscQoca9b6CM52QCfiXK4UXrvsF00wbmMVYf9QVZMPhT_BYzpjhcHGCI/exec";
 
 function App() {
   const [name, setName] = useState('');
