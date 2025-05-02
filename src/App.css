@@ -205,7 +205,6 @@ body {
   }
 }
 
-/* Error Message */
 .error-message {
   color: var(--error);
   background-color: rgba(247, 37, 133, 0.1);
@@ -215,7 +214,6 @@ body {
   font-weight: 500;
 }
 
-/* Responsive */
 @media (max-width: 600px) {
   .card {
     padding: 1.5rem;

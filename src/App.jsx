@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import ColorPalette from './components/ColorPalette';
+import ColorForm from './components/ColorForm';
+import ColorSuccess from './components/ColorSuccess';
+import LoadingSpinner from './components/LoadingSpinner';
+import ErrorMessage from './components/ErrorMessage';
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzxjAtbfThvYscQoca9b6CM52QCfiXK4UXrvsF00wbmMVYf9QVZMPhT_BYzpjhcHGCI/exec";
+const SCRIPT_URL = "YOUR_GOOGLE_SCRIPT_URL";
 
 function App() {
   const [name, setName] = useState('');
@@ -12,19 +17,23 @@ function App() {
 
   useEffect(() => {
     if (!assigned) {
-      setIsLoading(true);
-      fetch(SCRIPT_URL)
-        .then(res => res.json())
-        .then(data => {
-          setColors(data);
-          setIsLoading(false);
-        })
-        .catch(err => {
-          setError('Failed to load colors. Please refresh the page.');
-          setIsLoading(false);
-        });
+      loadColors();
     }
   }, [assigned]);
+
+  const loadColors = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(SCRIPT_URL);
+      const data = await response.json();
+      setColors(data);
+    } catch (err) {
+      setError('Failed to load colors. Please refresh the page.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSubmit = async () => {
     if (!name.trim()) {
@@ -37,7 +46,7 @@ function App() {
 
     try {
       const params = new URLSearchParams({ name });
-      const res = await fetch(`${SCRIPT_URL}`, {
+      const res = await fetch(SCRIPT_URL, {
         method: 'POST',
         body: params,
       });
@@ -54,34 +63,15 @@ function App() {
     }
   };
 
+  const handleReset = () => {
+    localStorage.removeItem('assigned');
+    setAssigned(null);
+    setName('');
+    loadColors();
+  };
+
   if (assigned) {
-    return (
-      <div className="container success-screen">
-        <div className="card">
-          <h1 className="title">Thanks, {assigned.name}!</h1>
-          <div
-            className="color-display"
-            style={{
-              backgroundColor: assigned.hex,
-              boxShadow: `0 0 20px ${assigned.hex}66`
-            }}
-          >
-            <span className="color-name">{assigned.color}</span>
-            <span className="color-hex">{assigned.hex}</span>
-          </div>
-          <p className="success-message">Your unique color has been saved.</p>
-          <button
-            className="reset-btn"
-            onClick={() => {
-              localStorage.removeItem('assigned');
-              setAssigned(null);
-            }}
-          >
-            Choose Another Color
-          </button>
-        </div>
-      </div>
-    );
+    return <ColorSuccess assigned={assigned} onReset={handleReset} />;
   }
 
   return (
@@ -90,42 +80,17 @@ function App() {
         <h1 className="title">Choose Your Color</h1>
         <p className="subtitle">Enter your name to get a unique color assignment</p>
 
-        {isLoading && <div className="loader"></div>}
-        {error && <div className="error-message">{error}</div>}
+        {isLoading && <LoadingSpinner />}
+        {error && <ErrorMessage message={error} />}
 
-        <div className="palette">
-          {colors.map(c => (
-            <div
-              key={c.color}
-              className="swatch"
-              style={{
-                backgroundColor: c.hex,
-                transform: `rotate(${Math.random() * 10 - 5}deg)`
-              }}
-              title={`${c.color} (${c.hex})`}
-            >
-              <span className="swatch-initial">{c.color[0]}</span>
-            </div>
-          ))}
-        </div>
+        <ColorPalette colors={colors} />
 
-        <div className="input-group">
-          <input
-            type="text"
-            placeholder="Enter your name"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            className="name-input"
-            onKeyPress={e => e.key === 'Enter' && handleSubmit()}
-          />
-          <button
-            onClick={handleSubmit}
-            className="submit-btn"
-            disabled={isLoading}
-          >
-            {isLoading ? 'Assigning...' : 'Get My Color'}
-          </button>
-        </div>
+        <ColorForm
+          name={name}
+          onNameChange={(e) => setName(e.target.value)}
+          onSubmit={handleSubmit}
+          isLoading={isLoading}
+        />
       </div>
     </div>
   );
